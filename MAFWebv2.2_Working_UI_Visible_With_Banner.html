@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MAF App</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #cc5500;
+      color: white;
+      font-family: sans-serif;
+    }
+    .banner {
+      background-color: #e7d1b4;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      height: 80px;
+      box-sizing: border-box;
+    }
+    .menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 33px;
+      cursor: pointer;
+      color: #000;
+    }
+    .menu-options {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background-color: #fff;
+      color: #000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      padding: 10px;
+      border-radius: 4px;
+      z-index: 999;
+    }
+    .menu-options a {
+      display: block;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .menu-options a:hover {
+      background-color: #eee;
+    }
+    .menu.open .menu-options {
+      display: block;
+    }
+    .banner-title {
+      color: #cc5500;
+      font-size: 36.4px;
+      font-weight: bold;
+      text-align: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .banner-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .banner img {
+      height: 50px;
+      width: 50px;
+      margin-left: 10px;
+    }
+    .auth-links {
+      color: #cc5500;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .auth-links a {
+      color: #cc5500;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+    .container {
+      display: none;
+      text-align: center;
+      padding-top: 140px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 20px;
+    }
+    .visible { display: block; }
+    .header { font-size: 24px; font-weight: bold; }
+    input, select {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #feedback {
+      font-weight: bold;
+      height: 30px;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    #finalScorePage { animation: fadeIn 1s ease-in-out; }
+  </style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="menu" id="hamburgerMenu">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <img src="mascot_resized.png" alt="Mascot">
+    <div class="menu-options" id="menuOptions">
+      <a href="#">Exams</a>
+      <a href="#">Lesson</a>
+      <a href="#">About</a>
+      <a href="#">Licensing Opportunities</a>
+      <a href="#">Version#</a>
+    </div>
+  </div>
+  <div class="banner-title">Winston</div>
+  <div class="banner-right">
+    <div class="auth-links">
+      <a href="#">Create Account</a> | <a href="#">Login</a>
+    </div>
+  </div>
+</div>
+
+<div id="landingPage" class="container visible">
+  <div class="header">Welcome to MAF (Math + Fun)</div>
+  <input id="screenNameInput" placeholder="Screen Name">
+  <input id="emailInput" placeholder="Parent Email">
+  <select id="gradeInput">
+    <option value="" disabled selected>Select Grade</option>
+    <option>K</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+  </select>
+  <select id="problemCountInput">
+    <option value="5">5 Problems</option>
+    <option value="10">10 Problems</option>
+    <option value="15">15 Problems</option>
+    <option value="20">20 Problems</option>
+    <option value="25">25 Problems</option>
+  </select>
+  <div>
+    <label><input type="checkbox" value="add" checked> Addition</label>
+    <label><input type="checkbox" value="sub"> Subtraction</label>
+    <label><input type="checkbox" value="mul"> Multiplication</label>
+    <label><input type="checkbox" value="div"> Division</label>
+    <label><input type="checkbox" value="poly"> Polynomials</label>
+  </div>
+  <select id="robuxInput">
+    <option value="1">1 Robuck per correct</option>
+    <option value="5">5 Robucks per correct</option>
+    <option value="10">10 Robucks per correct</option>
+  </select>
+  <button id="startBtn">Start Workbook</button>
+</div>
+
+<div id="workbookPage" class="container">
+  <div class="header">Workbook</div>
+  <div id="dateInfo"></div>
+  <div id="screenName"></div>
+  <div id="percentage">Score: 0%</div>
+  <div id="question" style="font-size: 28px; margin-top: 20px;">Loading...</div>
+  <input id="answer" placeholder="Your Answer">
+  <button onclick="submitAnswer()">Enter</button>
+  <div id="feedback"></div>
+  <div style="margin-top: 20px;">
+    <div><strong>National Rank:</strong> Top 50%</div>
+    <div><strong>Robucks Earned:</strong> <span id="robux">0</span></div>
+  </div>
+  <div style="margin-top: 40px;">
+    <button onclick="exitWorkbook()">Exit</button>
+    <button onclick="restartProblems()">Restart</button>
+  </div>
+</div>
+
+<div id="finalScorePage" class="container" style="display: none;">
+  <h2>Final Score</h2>
+  <p id="finalScoreText"></p>
+  <button onclick="sendReport()">Send Report</button>
+  <button onclick="restartFromFinal()">Restart</button>
+</div>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("hamburgerMenu");
+    menu.classList.toggle("open");
+  }
+
+  let currentIndex = 0;
+  let correctAnswers = 0;
+  let totalProblems = 10;
+  let robuxPerCorrect = 1;
+  let problems = [];
+  let parentEmail = "";
+  let selectedTypes = [];
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("startBtn").addEventListener("click", startWorkbook);
+  });
+
+  function startWorkbook() {
+    const name = document.getElementById("screenNameInput").value;
+    parentEmail = document.getElementById("emailInput").value;
+    const grade = document.getElementById("gradeInput").value;
+    totalProblems = parseInt(document.getElementById("problemCountInput").value);
+    robuxPerCorrect = parseInt(document.getElementById("robuxInput").value);
+    selectedTypes = Array.from(document.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+    document.getElementById("screenName").innerText = name;
+
+    document.getElementById("landingPage").style.display = "none";
+    document.getElementById("workbookPage").style.display = "block";
+
+    getJulianDateAndGMT();
+    generateProblems();
+    loadNextQuestion();
+  }
+
+  function getJulianDateAndGMT() {
+    const now = new Date();
+    const gmtTime = now.toUTCString().split(' ')[4] + " GMT";
+    const julian = Math.floor(now / 86400000 + 2440587.5);
+    const jd = julian + (now.getUTCHours() + now.getUTCMinutes()/60 + now.getUTCSeconds()/3600)/24;
+    document.getElementById("dateInfo").innerText = jd.toFixed(5) + " | " + gmtTime;
+  }
+
+  function generateProblems() {
+    problems = [];
+    const typeCount = selectedTypes.length;
+    const problemsPerType = Math.floor(totalProblems / typeCount);
+    let remainder = totalProblems % typeCount;
+
+    selectedTypes.forEach(type => {
+      let count = problemsPerType + (remainder-- > 0 ? 1 : 0);
+      for (let i = 0; i < count; i++) {
+        let p;
+        switch (type) {
+          case 'add': p = { question: rand(1,50) + " + " + rand(1,50), answer: rand(1,50) + rand(1,50) }; break;
+          case 'sub': p = { question: rand(30,100) + " - " + rand(1,30), answer: rand(30,100) - rand(1,30) }; break;
+          case 'mul': p = { question: rand(2,12) + " × " + rand(2,12), answer: rand(2,12) * rand(2,12) }; break;
+          case 'div': let b = rand(2,12), a = b * rand(2,12); p = { question: a + " ÷ " + b, answer: a / b }; break;
+          case 'poly': let x=rand(1,5), c=rand(1,5), d=rand(0,10); p = { question: `If x = ${x}, what is ${c}x + ${d}?`, answer: c*x + d }; break;
+        }
+        problems.push(p);
+      }
+    });
+
+    problems = problems.sort(() => Math.random() - 0.5);
+  }
+
+  function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function loadNextQuestion() {
+    if (currentIndex >= problems.length) {
+      showFinalScore();
+      return;
+    }
+    document.getElementById("question").innerText = problems[currentIndex].question;
+    document.getElementById("answer").value = "";
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function submitAnswer() {
+    const userAns = parseFloat(document.getElementById("answer").value);
+    const correctAns = problems[currentIndex].answer;
+    let fb = document.getElementById("feedback");
+    if (userAns === correctAns) {
+      correctAnswers++;
+      fb.innerText = "✅ Correct!";
+      fb.style.color = "lightgreen";
+    } else {
+      fb.innerText = `❌ Incorrect. The correct answer was ${correctAns}.`;
+      fb.style.color = "red";
+    }
+    document.getElementById("robux").innerText = correctAnswers * robuxPerCorrect;
+    currentIndex++;
+    const percentage = Math.round((correctAnswers / totalProblems) * 100);
+    document.getElementById("percentage").innerText = `Score: ${percentage}%`;
+    setTimeout(loadNextQuestion, 1500);
+  }
+
+  function restartProblems() {
+    currentIndex = 0;
+    correctAnswers = 0;
+    document.getElementById("percentage").innerText = "Score: 0%";
+    document.getElementById("robux").innerText = "0";
+    document.getElementById("finalScorePage").style.display = "none";
+    document.getElementById("workbookPage").style.display = "block";
+    generateProblems();
+    loadNextQuestion();
+  }
+
+  function exitWorkbook() {
+    document.location.reload();
+  }
+
+  function showFinalScore() {
+    document.getElementById("workbookPage").style.display = "none";
+    document.getElementById("finalScorePage").style.display = "block";
+    const percentage = Math.round((correctAnswers / totalProblems) * 100);
+    let symbol = "";
+    if (percentage > 95) { symbol = "🚀"; }
+    else if (percentage > 85) { symbol = "⭐"; }
+    else if (percentage > 75) { symbol = "🏆"; }
+    document.getElementById("finalScoreText").innerText = `You got ${percentage}% correct! ${symbol}`;
+  }
+
+  function restartFromFinal() {
+    restartProblems();
+  }
+
+  function sendReport() {
+    const percentage = Math.round((correctAnswers / totalProblems) * 100);
+    alert(`Report sent to ${parentEmail} with score: ${percentage}%`);
+  }
+</script>
+
+</body>
+</html>

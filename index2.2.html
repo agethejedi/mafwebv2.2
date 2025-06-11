@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Winston Home</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #cc5500;
+      color: white;
+      font-family: sans-serif;
+    }
+    .banner {
+      background-color: #e7d1b4;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      height: 80px;
+      box-sizing: border-box;
+    }
+    .menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 33px;
+      cursor: pointer;
+      color: #000;
+    }
+    .menu-options {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background-color: #fff;
+      color: #000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      padding: 10px;
+      border-radius: 4px;
+      z-index: 999;
+    }
+    .menu-options a {
+      display: block;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .menu-options a:hover {
+      background-color: #eee;
+    }
+    .menu.open .menu-options {
+      display: block;
+    }
+    .banner-title {
+      color: #cc5500;
+      font-size: 36.4px;
+      font-weight: bold;
+      text-align: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .banner-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .auth-links {
+      color: #cc5500;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .auth-links a {
+      color: #cc5500;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+    .main-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding-top: 80px;
+      box-sizing: border-box;
+    }
+    .mascot {
+      height: 400px;
+      margin-right: 40px;
+    }
+    .cta-link {
+      font-size: 26px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      border: 2px solid white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .cta-link:hover {
+      background-color: white;
+      color: #cc5500;
+    }
+  </style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="menu" id="hamburgerMenu">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="menu-options" id="menuOptions">
+      <a href="#">Exams</a>
+      <a href="#">Lesson</a>
+      <a href="#">About</a>
+      <a href="#">Licensing Opportunities</a>
+      <a href="#">Version#</a>
+    </div>
+  </div>
+  <div class="banner-title">Winston</div>
+  <div class="banner-right">
+    <div class="auth-links">
+      <a href="#">Create Account</a> | <a href="#">Login</a>
+    </div>
+  </div>
+</div>
+
+<div class="main-content">
+  <img src="winston_homepage_mascot.png" class="mascot" alt="Winston Mascot">
+  <a href="MAFWebv2.2_Working_UI_Visible_With_Banner.html" class="cta-link">Start Earning for Learning</a>
+</div>
+
+<script>
+  function toggleMenu() {
+    document.getElementById("hamburgerMenu").classList.toggle("open");
+  }
+</script>
+
+</body>
+</html>
